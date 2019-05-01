@@ -1,11 +1,18 @@
 import express from 'express';
 import renderer from './helpers/renderer';
+import creatStore from './helpers/creatStore';
 
 const app = express();
 
 app.use(express.static('public'));
 app.get('*', (req, res) => {
-  res.send(renderer(req));
+  const store = creatStore();
+
+  // soe logic to initialize
+  // thunkでのAPI処理とか
+  // と思われる。
+
+  res.send(renderer(req, store));
 });
 
 app.listen(9000, () => {

@@ -84,13 +84,23 @@ var _renderer = __webpack_require__(5);
 
 var _renderer2 = _interopRequireDefault(_renderer);
 
+var _creatStore = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./helpers/creatStore\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+var _creatStore2 = _interopRequireDefault(_creatStore);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
 
 app.use(_express2.default.static('public'));
 app.get('*', function (req, res) {
-  res.send((0, _renderer2.default)(req));
+  var store = (0, _creatStore2.default)();
+
+  // soe logic to initialize
+  // thunkでのAPI処理とか
+  // と思われる。
+
+  res.send((0, _renderer2.default)(req, store));
 });
 
 app.listen(9000, function () {
@@ -166,17 +176,25 @@ var _server = __webpack_require__(3);
 
 var _reactRouterDom = __webpack_require__(6);
 
+var _reactRedux = __webpack_require__(8);
+
 var _Routes = __webpack_require__(7);
 
 var _Routes2 = _interopRequireDefault(_Routes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// 通常のcreateStoreは要らない。呼び出し元でstoreを渡しているから。
+
 exports.default = function (req) {
   var content = (0, _server.renderToString)(_react2.default.createElement(
-    _reactRouterDom.StaticRouter,
-    { location: req.path, context: {} },
-    _react2.default.createElement(_Routes2.default, null)
+    _reactRedux.Provider,
+    { store: store },
+    _react2.default.createElement(
+      _reactRouterDom.StaticRouter,
+      { location: req.path, context: {} },
+      _react2.default.createElement(_Routes2.default, null)
+    )
   ));
 
   return '\n    <html>\n      <head></head>\n      <body>\n        <div id="root">' + content + '</div>\n        <script src="bundle.js"></script>\n      </body>\n    </html>\n  ';
@@ -215,12 +233,17 @@ exports.default = function () {
   return _react2.default.createElement(
     'div',
     null,
-    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _Home2.default }),
-    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/hi', component: function component() {
-        return 'hihi!';
-      } })
+    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _Home2.default })
   );
 };
+
+//http://react-ssr-api.herokuapp.com/
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-redux");
 
 /***/ })
 /******/ ]);

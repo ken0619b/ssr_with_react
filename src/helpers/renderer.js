@@ -1,13 +1,19 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import Routes from '../client/Routes';
+
+// 通常のcreateStoreは要らない。呼び出し元でstoreを渡しているから。
 
 export default (req) => {
   const content = renderToString(
-  <StaticRouter location={req.path} context={{}}>
-    <Routes />
-  </StaticRouter>);
+    <Provider store={store}>
+    <StaticRouter location={req.path} context={{}}>
+      <Routes />
+    </StaticRouter>
+  </Provider>
+  );
 
   return `
     <html>
