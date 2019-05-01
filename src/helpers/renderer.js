@@ -6,7 +6,7 @@ import Routes from '../client/Routes';
 
 // 通常のcreateStoreは要らない。呼び出し元でstoreを渡しているから。
 
-export default (req) => {
+export default (req, store) => {
   const content = renderToString(
     <Provider store={store}>
     <StaticRouter location={req.path} context={{}}>
