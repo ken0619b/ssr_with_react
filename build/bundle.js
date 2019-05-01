@@ -22629,7 +22629,7 @@ var Home = function Home() {
   return _react2.default.createElement(
     'div',
     null,
-    'I\'m the BEST BEST BEST home component'
+    'I\'m the home component'
   );
 };
 
