@@ -4,6 +4,7 @@ import App from './App';
 import HomePage from './components/pages/HomePage';
 import UsersListPage from './components/pages/UsersListPage';
 import NotFoundPage from './components/pages/NotFoundPage';
+import AdminsListPage from './components/pages/AdminsListPage';
 
 export default [
   {
@@ -13,6 +14,10 @@ export default [
         ...HomePage,  // => component: HomePage　と同じ
         path: '/',
         exact: true
+      },
+      {
+        ...AdminsListPage,
+        path: '/admins'
       },
       {
         ...UsersListPage, // => component: UserListPage, loadData: loadDataと同じ

@@ -24,6 +24,12 @@ app.get('*', (req, res) => {
   // 複数買えるケースがある？？　routingだから1マッチなのかなと思うけど
   const promises = matchRoutes(Routes, req.path).map(({ route }) => {
     return route.loadData ? route.loadData(store) : null; //routeごとにloadDataが存在しないケースが有るため
+  }).map(promise => {
+    if (promise) {
+      return new Promise((resolve, reject) => {
+        promise.then(resolve).catch(resolve);
+      });
+    }
   });
 
   Promise.all(promises).then(() => {
@@ -36,6 +42,11 @@ app.get('*', (req, res) => {
     res.send(content);
   });
 });
+
+//このpromises.allが失敗するときに
+// 1: .catchを実装する -> ユーザはどうしようもない
+// 2: エラーが有る場合に、打ち切って、promises.all()を実行しない -> 後続のリクエストが実施されない
+// 3: 個別promisesをpromiseにまとめて、
 
 app.listen(3000, () => {
   console.log('Listening on 3000');
