@@ -7,7 +7,7 @@ export default (ChildComponent) => {
     render() {
       switch (this.props.auth) {
         case false:
-          return <Redirect to='/' />;
+          return <Redirect to='/' />;  //SSRの場合、再描画されない・・？
         case null:
           return <div>Loading...</div>;
         default:

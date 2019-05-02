@@ -2,7 +2,6 @@
 
 export const FETCH_USERS = 'fetch_users';
 export const fetchUsers = () => async (dispatch, getState, api) => {
-  console.log('fetchUsers called');
   // ここを、クライアントorサーバーのthunk(に渡されたaxios)を使うことで振る舞いを変える
 
   // const res = await axios.get('http://react-ssr-api.herokuapp.com/users');

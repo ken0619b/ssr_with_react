@@ -6,6 +6,7 @@ import Routes from '../client/Routes';
 import serialize from 'serialize-javascript';
 import { renderRoutes } from 'react-router-config';
 // 通常のcreateStoreは要らない。呼び出し元でstoreを渡しているから。
+import { Helmet } from 'react-helmet';
 
 // このstoreはserverのstore
 
@@ -37,9 +38,13 @@ export default (req, store, context) => {
 
 // serializeで以下のようにする
 
+  const helmet = Helmet.renderStatic();
+
   return `
     <html>
       <head>
+      ${helmet.title.toString()}
+      ${helmet.meta.toString()}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
       </head>
       <body>
