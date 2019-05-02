@@ -18385,7 +18385,6 @@ var UsersList = function (_Component) {
   _createClass(UsersList, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      //　あとで実装
       this.props.fetchUsers();
     }
   }, {
@@ -18427,6 +18426,8 @@ function loadData(store) {
   // APIコールの場合、ここでDispatchする
   // storeはRoutes.jsから継承
   // Promiseが帰ってくる-> APIコールするからかな
+  // この時点で、まだfetchUsers(connectで渡ってきているfetchUserはっコールできない。hydrateするまでは
+  // 湯運行にならないので)
   return store.dispatch((0, _actions.fetchUsers)());
 }
 

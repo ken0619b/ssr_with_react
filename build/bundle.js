@@ -119,15 +119,16 @@ app.get('*', function (req, res) {
 
   // react-routes-configを使い、コンポーネントでdataを取得する必要があるか見る
   // store があるので、これ経由でloadData内でactionをコールする感じかな
+  // 複数買えるケースがある？？　routingだから1マッチなのかなと思うけど
   var promises = (0, _reactRouterConfig.matchRoutes)(_Routes2.default, req.path).map(function (_ref) {
     var route = _ref.route;
 
     return route.loadData ? route.loadData(store) : null; //routeごとにloadDataが存在しないケースが有るため
   });
 
-  console.log(promises);
-
-  res.send((0, _renderer2.default)(req, store));
+  Promise.all(promises).then(function () {
+    res.send((0, _renderer2.default)(req, store));
+  });
 });
 
 app.listen(9000, function () {
@@ -473,7 +474,6 @@ var UsersList = function (_Component) {
   _createClass(UsersList, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      //　あとで実装
       this.props.fetchUsers();
     }
   }, {
@@ -515,6 +515,8 @@ function loadData(store) {
   // APIコールの場合、ここでDispatchする
   // storeはRoutes.jsから継承
   // Promiseが帰ってくる-> APIコールするからかな
+  // この時点で、まだfetchUsers(connectで渡ってきているfetchUserはっコールできない。hydrateするまでは
+  // 湯運行にならないので)
   return store.dispatch((0, _actions.fetchUsers)());
 }
 

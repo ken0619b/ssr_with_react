@@ -13,13 +13,14 @@ app.get('*', (req, res) => {
 
   // react-routes-configを使い、コンポーネントでdataを取得する必要があるか見る
   // store があるので、これ経由でloadData内でactionをコールする感じかな
+  // 複数買えるケースがある？？　routingだから1マッチなのかなと思うけど
   const promises = matchRoutes(Routes, req.path).map(({ route }) => {
     return route.loadData ? route.loadData(store) : null; //routeごとにloadDataが存在しないケースが有るため
   });
 
-  console.log(promises);
-
-  res.send(renderer(req, store));
+  Promise.all(promises).then(() => {
+    res.send(renderer(req, store));
+  });
 });
 
 app.listen(9000, () => {
