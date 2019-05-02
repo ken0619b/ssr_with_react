@@ -1,18 +1,17 @@
 import React from 'react';
 // import { Route } from 'react-router-dom';
-import Home from './components/Home';
-import UsersList, { loadData } from './components/UsersList';
+import HomePage from './components/pages/HomePage';
+import UsersListPage from './components/pages/UsersListPage';
 
 export default [
   {
+    ...HomePage,  // => component: HomePage　と同じ
     path: '/',
-    component: Home,
     exact: true
   },
   {
-    loadData,
+    ...UsersListPage, // => component: UserListPage, loadData: loadDataと同じ
     path: '/users',
-    component: UsersList
   }
 ];
 
