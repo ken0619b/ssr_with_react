@@ -10,7 +10,7 @@ const app = express();
 
 app.use('/api', proxy('http://react-ssr-api.herokuapp.com', {
   proxyReqOptDecorator(opts){
-    opts.headers['x-forwarded-host'] = 'localhost:9000'
+    opts.headers['x-forwarded-host'] = 'localhost:3000' // これ、localhost:3000からのアクセスを許可しているので変更
     return opts;
   }
 }))
@@ -31,6 +31,6 @@ app.get('*', (req, res) => {
   });
 });
 
-app.listen(9000, () => {
-  console.log('Listening on 9000');
+app.listen(3000, () => {
+  console.log('Listening on 3000');
 });
