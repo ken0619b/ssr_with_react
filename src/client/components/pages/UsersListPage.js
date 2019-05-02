@@ -6,7 +6,7 @@ class UsersList extends Component {
   componentDidMount(){
     // serverからclientへstateを渡しつつ、server側のloadDataでuserlistを取得しているので、
     // このfetchUsersは不要となる
-    // this.props.fetchUsers();
+    this.props.fetchUsers();
   }
 
   renderUsers() {

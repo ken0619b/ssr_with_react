@@ -1,15 +1,23 @@
 import 'babel-polyfill';
 import express from 'express';
 import { matchRoutes } from 'react-router-config';
+import proxy from 'express-http-proxy';
 import Routes from './client/Routes';  // Arrayのやつ
 import renderer from './helpers/renderer';
 import creatStore from './helpers/createStore';
 
 const app = express();
 
+app.use('/api', proxy('http://react-ssr-api.herokuapp.com', {
+  proxyReqOptDecorator(opts){
+    opts.headers['x-forwarded-host'] = 'localhost:9000'
+    return opts;
+  }
+}))
+
 app.use(express.static('public'));
 app.get('*', (req, res) => {
-  const store = creatStore();
+  const store = creatStore(req);
 
   // react-routes-configを使い、コンポーネントでdataを取得する必要があるか見る
   // store があるので、これ経由でloadData内でactionをコールする感じかな

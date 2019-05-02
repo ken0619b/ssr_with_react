@@ -10,11 +10,21 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import reducers from '../client/reducers';
+import axios from 'axios';
+
+// serverへのアクセスに使用する。 なので、apiサーバーを向かせない
+// このとき、'/api/*'はproxyが適用される
+
+const axiosInstance = axios.create({
+  baseURL: '/api'
+});
+
+
 
 const store = createStore(
   reducers,
   window.INITIAL_STATE,
-  applyMiddleware(thunk));
+  applyMiddleware(thunk.withExtraArgument(axiosInstance))); //thnkの振る舞いを変えるため、withExtraArgumentを使う
 
 ReactDOM.hydrate(
   <Provider store={store}>
