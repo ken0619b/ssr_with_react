@@ -28,4 +28,13 @@ function mapStateToProps(state) {
   return { users: state.users };
 }
 
+// この名前でfunctionを定義しておくと、router-configで呼び出せる（fetchできる）
+function loadData(store) {
+  // APIコールの場合、ここでDispatchする
+  // storeはRoutes.jsから継承
+  // Promiseが帰ってくる-> APIコールするからかな
+  return store.dispatch(fetchUsers());
+}
+
+export { loadData };
 export default connect(mapStateToProps, { fetchUsers })(UsersList)

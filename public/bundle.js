@@ -16195,6 +16195,7 @@ exports.default = [{
   component: _Home2.default,
   exact: true
 }, {
+  loadData: _UsersList.loadData,
   path: '/users',
   component: _UsersList2.default
 }];
@@ -18352,6 +18353,7 @@ module.exports = Cancel;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.loadData = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -18420,6 +18422,15 @@ function mapStateToProps(state) {
   return { users: state.users };
 }
 
+// この名前でfunctionを定義しておくと、router-configで呼び出せる（fetchできる）
+function loadData(store) {
+  // APIコールの場合、ここでDispatchする
+  // storeはRoutes.jsから継承
+  // Promiseが帰ってくる-> APIコールするからかな
+  return store.dispatch((0, _actions.fetchUsers)());
+}
+
+exports.loadData = loadData;
 exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchUsers: _actions.fetchUsers })(UsersList);
 
 /***/ }),
@@ -18451,10 +18462,11 @@ var fetchUsers = exports.fetchUsers = function fetchUsers() {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
+              console.log('fetchUsers called');
+              _context.next = 3;
               return _axios2.default.get('http://react-ssr-api.herokuapp.com/users');
 
-            case 2:
+            case 3:
               res = _context.sent;
 
 
@@ -18463,7 +18475,7 @@ var fetchUsers = exports.fetchUsers = function fetchUsers() {
                 payload: res
               });
 
-            case 4:
+            case 5:
             case 'end':
               return _context.stop();
           }

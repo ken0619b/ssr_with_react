@@ -94,6 +94,12 @@ var _express = __webpack_require__(4);
 
 var _express2 = _interopRequireDefault(_express);
 
+var _reactRouterConfig = __webpack_require__(18);
+
+var _Routes = __webpack_require__(8);
+
+var _Routes2 = _interopRequireDefault(_Routes);
+
 var _renderer = __webpack_require__(5);
 
 var _renderer2 = _interopRequireDefault(_renderer);
@@ -104,15 +110,22 @@ var _createStore2 = _interopRequireDefault(_createStore);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// Arrayのやつ
 var app = (0, _express2.default)();
 
 app.use(_express2.default.static('public'));
 app.get('*', function (req, res) {
   var store = (0, _createStore2.default)();
 
-  // soe logic to initialize
-  // thunkでのAPI処理とか
-  // と思われる。
+  // react-routes-configを使い、コンポーネントでdataを取得する必要があるか見る
+  // store があるので、これ経由でloadData内でactionをコールする感じかな
+  var promises = (0, _reactRouterConfig.matchRoutes)(_Routes2.default, req.path).map(function (_ref) {
+    var route = _ref.route;
+
+    return route.loadData ? route.loadData(store) : null; //routeごとにloadDataが存在しないケースが有るため
+  });
+
+  console.log(promises);
 
   res.send((0, _renderer2.default)(req, store));
 });
@@ -219,6 +232,7 @@ exports.default = [{
   component: _Home2.default,
   exact: true
 }, {
+  loadData: _UsersList.loadData,
   path: '/users',
   component: _UsersList2.default
 }];
@@ -384,10 +398,11 @@ var fetchUsers = exports.fetchUsers = function fetchUsers() {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
+              console.log('fetchUsers called');
+              _context.next = 3;
               return _axios2.default.get('http://react-ssr-api.herokuapp.com/users');
 
-            case 2:
+            case 3:
               res = _context.sent;
 
 
@@ -396,7 +411,7 @@ var fetchUsers = exports.fetchUsers = function fetchUsers() {
                 payload: res
               });
 
-            case 4:
+            case 5:
             case 'end':
               return _context.stop();
           }
@@ -426,6 +441,7 @@ module.exports = require("axios");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.loadData = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -494,6 +510,15 @@ function mapStateToProps(state) {
   return { users: state.users };
 }
 
+// この名前でfunctionを定義しておくと、router-configで呼び出せる（fetchできる）
+function loadData(store) {
+  // APIコールの場合、ここでDispatchする
+  // storeはRoutes.jsから継承
+  // Promiseが帰ってくる-> APIコールするからかな
+  return store.dispatch((0, _actions.fetchUsers)());
+}
+
+exports.loadData = loadData;
 exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchUsers: _actions.fetchUsers })(UsersList);
 
 /***/ }),
