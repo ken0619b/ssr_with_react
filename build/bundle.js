@@ -166,6 +166,10 @@ var _Routes = __webpack_require__(8);
 
 var _Routes2 = _interopRequireDefault(_Routes);
 
+var _serializeJavascript = __webpack_require__(21);
+
+var _serializeJavascript2 = _interopRequireDefault(_serializeJavascript);
+
 var _reactRouterConfig = __webpack_require__(18);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -189,7 +193,26 @@ exports.default = function (req, store) {
     )
   ));
 
-  return '\n    <html>\n      <head></head>\n      <body>\n        <div id="root">' + content + '</div>\n        <script>\n          window.INITIAL_STATE = ' + JSON.stringify(store.getState()) + '\n        </script>\n        <script src="bundle.js"></script>\n      </body>\n    </html>\n  ';
+  // このままの場合、XSSができてしまう。
+  // scriptタグへ埋め込んでいるから。
+
+  //   return `
+  //   <html>
+  //     <head></head>
+  //     <body>
+  //       <div id="root">${content}</div>
+  //       <script>
+  //         window.INITIAL_STATE = ${JSON.stringify(store.getState())}
+  //       </script>
+  //       <script src="bundle.js"></script>
+  //     </body>
+  //   </html>
+  // `;
+  // };
+
+  // serializeで以下のようにする
+
+  return '\n    <html>\n      <head></head>\n      <body>\n        <div id="root">' + content + '</div>\n        <script>\n          window.INITIAL_STATE = ' + (0, _serializeJavascript2.default)(store.getState()) + '\n        </script>\n        <script src="bundle.js"></script>\n      </body>\n    </html>\n  ';
 };
 
 /***/ }),
@@ -543,6 +566,12 @@ exports.default = {
   loadData: loadData, // => loadData: loadData,
   component: (0, _reactRedux.connect)(mapStateToProps, { fetchUsers: _actions.fetchUsers })(UsersList)
 };
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+module.exports = require("serialize-javascript");
 
 /***/ })
 /******/ ]);
