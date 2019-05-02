@@ -4,7 +4,9 @@ import { fetchUsers } from '../../actions';
 
 class UsersList extends Component {
   componentDidMount(){
-    this.props.fetchUsers();
+    // serverからclientへstateを渡しつつ、server側のloadDataでuserlistを取得しているので、
+    // このfetchUsersは不要となる
+    // this.props.fetchUsers();
   }
 
   renderUsers() {

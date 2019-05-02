@@ -172,6 +172,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // 通常のcreateStoreは要らない。呼び出し元でstoreを渡しているから。
 
+// このstoreはserverのstore
+
 exports.default = function (req, store) {
   var content = (0, _server.renderToString)(_react2.default.createElement(
     _reactRedux.Provider,
@@ -187,7 +189,7 @@ exports.default = function (req, store) {
     )
   ));
 
-  return '\n    <html>\n      <head></head>\n      <body>\n        <div id="root">' + content + '</div>\n        <script src="bundle.js"></script>\n      </body>\n    </html>\n  ';
+  return '\n    <html>\n      <head></head>\n      <body>\n        <div id="root">' + content + '</div>\n        <script>\n          window.INITIAL_STATE = ' + JSON.stringify(store.getState()) + '\n        </script>\n        <script src="bundle.js"></script>\n      </body>\n    </html>\n  ';
 };
 
 /***/ }),
@@ -489,7 +491,9 @@ var UsersList = function (_Component) {
   _createClass(UsersList, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.props.fetchUsers();
+      // serverからclientへstateを渡しつつ、server側のloadDataでuserlistを取得しているので、
+      // このfetchUsersは不要となる
+      // this.props.fetchUsers();
     }
   }, {
     key: 'renderUsers',

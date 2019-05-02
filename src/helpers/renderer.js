@@ -6,6 +6,8 @@ import Routes from '../client/Routes';
 import { renderRoutes } from 'react-router-config';
 // 通常のcreateStoreは要らない。呼び出し元でstoreを渡しているから。
 
+// このstoreはserverのstore
+
 export default (req, store) => {
   const content = renderToString(
     <Provider store={store}>
@@ -20,6 +22,9 @@ export default (req, store) => {
       <head></head>
       <body>
         <div id="root">${content}</div>
+        <script>
+          window.INITIAL_STATE = ${JSON.stringify(store.getState())}
+        </script>
         <script src="bundle.js"></script>
       </body>
     </html>

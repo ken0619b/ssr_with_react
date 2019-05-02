@@ -4689,7 +4689,7 @@ var _reducers2 = _interopRequireDefault(_reducers);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Startup point for the client side application
-var store = (0, _redux.createStore)(_reducers2.default, {}, (0, _redux.applyMiddleware)(_reduxThunk2.default));
+var store = (0, _redux.createStore)(_reducers2.default, window.INITIAL_STATE, (0, _redux.applyMiddleware)(_reduxThunk2.default));
 // import Home from './components/Home'; Route内でHomeコンポーネントを読んでいるのでこちらだと不要
 
 
@@ -29853,7 +29853,9 @@ var UsersList = function (_Component) {
   _createClass(UsersList, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.props.fetchUsers();
+      // serverからclientへstateを渡しつつ、server側のloadDataでuserlistを取得しているので、
+      // このfetchUsersは不要となる
+      // this.props.fetchUsers();
     }
   }, {
     key: 'renderUsers',
